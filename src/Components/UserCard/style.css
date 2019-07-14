@@ -1,0 +1,9 @@
+.usercard {
+  height: 100px;
+  width: 250px;
+  margin: auto;
+  margin-top: 10px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #e5e7e8;
+}
