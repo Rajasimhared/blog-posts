@@ -21,13 +21,15 @@ export default class HomePage extends React.Component {
   }
 
   handleClick = value => {
-    // this.props.history.push(`/posts/${value}`);
+    this.props.history.push(`/posts/${value}`);
   };
 
   getUserCards = () => {
     const { dataList } = this.state;
     return dataList.map((data, key) => (
-      <PostCard key={key} data={data} onClick={this.handleClick} id={key + 1} />
+      <div onClick={() => this.handleClick(data.id)} className="post-titles">
+        {data.title}
+      </div>
     ));
   };
   render() {

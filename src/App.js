@@ -8,9 +8,10 @@ import "./App.css";
 function App() {
   return (
     <Switch>
+      <Route exact path="/" component={HomePage} />
       <Route path="/users" component={HomePage} />
+      <Route path="/posts/:number" component={DetailsPage} />
       <Route path="/posts" component={PostsPage} />
-      <Route path="/comments" component={HomePage} />
     </Switch>
   );
 }
