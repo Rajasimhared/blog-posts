@@ -5,6 +5,8 @@ import { API_BASE } from "../../Utils/Constants";
 import LoadingCard from "../../Components/LoadingCard";
 import "./style.css";
 
+const MemoizedLoader = React.memo(LoadingCard);
+
 export default class DetailsPage extends React.Component {
   constructor(props) {
     super(props);
@@ -42,11 +44,12 @@ export default class DetailsPage extends React.Component {
   };
 
   deletePost = () => {
+    const { history } = this.props;
     fetch(`${API_BASE}${window.location.pathname}`, {
       method: "DELETE"
     })
       .then(response => response.json())
-      .then(this.props.history.goBack());
+      .then(history.goBack());
   };
 
   render() {
@@ -64,10 +67,14 @@ export default class DetailsPage extends React.Component {
         {dataList.length !== 0 ? (
           this.getUserCards()
         ) : (
-          <LoadingCard style={styleContent} count={1} />
+          <MemoizedLoader style={styleContent} count={1} />
         )}
-        <button onClick={this.fetchComments}>Show Comments</button>
-        <button onClick={this.deletePost}>Delete Post</button>
+        <button onClick={this.fetchComments} className="button">
+          Show Comments
+        </button>
+        <button onClick={this.deletePost} className="button">
+          Delete Post
+        </button>
 
         {comments ? (
           <div>
@@ -76,7 +83,7 @@ export default class DetailsPage extends React.Component {
             ))}
           </div>
         ) : (
-          loading && <LoadingCard style={styleComment} count={10} />
+          loading && <MemoizedLoader style={styleComment} count={10} />
         )}
       </div>
     );

@@ -3,7 +3,11 @@ import "./style.css";
 
 const PostCard = ({ data, onClick, id }) => (
   <div className="postcard" onClick={() => onClick(id)}>
-    <div>Title:{data.title}</div>
+    <div>
+      Title:
+      <br />
+      {data.title}
+    </div>
     <br />
     <div>{data.body}</div>
   </div>

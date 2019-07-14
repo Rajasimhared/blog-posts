@@ -4,6 +4,8 @@ import UserCard from "../../Components/UserCard";
 import LoadingCard from "../../Components/LoadingCard";
 import "./style.css";
 
+const MemoizedLoader = React.memo(LoadingCard);
+
 export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
@@ -18,12 +20,16 @@ export default class HomePage extends React.Component {
 
   async getPostsData() {
     const { dataList, success } = await getData();
-    this.setState({ dataList });
+    if (success) {
+      this.setState({ dataList });
+    }
   }
 
   handleClick = (value, name) => {
+    const { history } = this.props;
+    // Save user name on localstorage as we don't get in further calls
     localStorage.setItem("userName", name);
-    this.props.history.push(`/posts?userId=${value}&skip=0&limit=10`);
+    history.push(`/posts?userId=${value}&skip=0&limit=10`);
   };
 
   getUserCards = () => {
@@ -32,18 +38,23 @@ export default class HomePage extends React.Component {
       <UserCard key={key} data={data} onClick={this.handleClick} />
     ));
   };
+
   render() {
+    // style for loader
     const style = {
       height: "100px",
-      width: "300px"
+      width: "250px",
+      margin: "auto",
+      marginTop: "10px"
     };
+
     const { dataList } = this.state;
     return (
       <div className="homepage">
         {dataList.length !== 0 ? (
           this.getUserCards()
         ) : (
-          <LoadingCard style={style} count={8} />
+          <MemoizedLoader style={style} count={10} />
         )}
       </div>
     );

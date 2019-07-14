@@ -4,6 +4,8 @@ import PostCard from "../../Components/PostCard";
 import LoadingCard from "../../Components/LoadingCard";
 import "./style.css";
 
+const MemoizedLoader = React.memo(LoadingCard);
+
 export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,8 @@ export default class HomePage extends React.Component {
   }
 
   handleClick = value => {
-    this.props.history.push(`/posts/${value}`);
+    const { history } = this.props;
+    history.push(`/posts/${value}`);
   };
 
   getUserCards = () => {
@@ -47,7 +50,7 @@ export default class HomePage extends React.Component {
         {dataList.length !== 0 ? (
           this.getUserCards()
         ) : (
-          <LoadingCard style={style} count={5} />
+          <MemoizedLoader style={style} count={5} />
         )}
       </div>
     );
