@@ -1,6 +1,7 @@
 import React from "react";
 import getData from "../../Utils/Api";
 import UserCard from "../../Components/UserCard";
+import LoadingCard from "../../Components/LoadingCard";
 import "./style.css";
 
 export default class HomePage extends React.Component {
@@ -20,17 +21,31 @@ export default class HomePage extends React.Component {
     this.setState({ dataList });
   }
 
-  handleClick = value => {
+  handleClick = (value, name) => {
+    localStorage.setItem("userName", name);
     this.props.history.push(`/posts?userId=${value}&skip=0&limit=10`);
   };
 
   getUserCards = () => {
     const { dataList } = this.state;
     return dataList.map((data, key) => (
-      <UserCard key={key} data={data} onClick={this.handleClick} id={key + 1} />
+      <UserCard key={key} data={data} onClick={this.handleClick} />
     ));
   };
   render() {
-    return <div className="homepage">{this.getUserCards()}</div>;
+    const style = {
+      height: "100px",
+      width: "300px"
+    };
+    const { dataList } = this.state;
+    return (
+      <div className="homepage">
+        {dataList.length !== 0 ? (
+          this.getUserCards()
+        ) : (
+          <LoadingCard style={style} count={8} />
+        )}
+      </div>
+    );
   }
 }

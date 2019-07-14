@@ -2,13 +2,15 @@ import React from "react";
 import getData from "../../Utils/Api";
 import PostCard from "../../Components/PostCard";
 import { API_BASE } from "../../Utils/Constants";
+import LoadingCard from "../../Components/LoadingCard";
 import "./style.css";
 
 export default class DetailsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataList: []
+      dataList: [],
+      loading: false
     };
   }
 
@@ -33,9 +35,10 @@ export default class DetailsPage extends React.Component {
   };
 
   fetchComments = () => {
+    this.setState({ loading: true });
     fetch(`${API_BASE}${window.location.pathname}/comments`)
       .then(response => response.json())
-      .then(myJson => this.setState({ comments: myJson }));
+      .then(myJson => this.setState({ comments: myJson, loading: false }));
   };
 
   deletePost = () => {
@@ -47,16 +50,34 @@ export default class DetailsPage extends React.Component {
   };
 
   render() {
-    const { comments } = this.state;
+    const { comments, dataList, loading } = this.state;
+    const styleContent = {
+      height: "100px",
+      width: "100%"
+    };
+    const styleComment = {
+      height: "30px",
+      width: "100%"
+    };
     return (
       <div className="homepage">
-        {this.getUserCards()}
+        {dataList.length !== 0 ? (
+          this.getUserCards()
+        ) : (
+          <LoadingCard style={styleContent} count={1} />
+        )}
         <button onClick={this.fetchComments}>Show Comments</button>
         <button onClick={this.deletePost}>Delete Post</button>
-        <div>
-          {comments &&
-            comments.map(value => <div className="comment">{value.body}</div>)}
-        </div>
+
+        {comments ? (
+          <div>
+            {comments.map(value => (
+              <div className="comment">{value.body}</div>
+            ))}
+          </div>
+        ) : (
+          loading && <LoadingCard style={styleComment} count={10} />
+        )}
       </div>
     );
   }

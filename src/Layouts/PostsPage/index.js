@@ -1,6 +1,7 @@
 import React from "react";
 import getData from "../../Utils/Api";
 import PostCard from "../../Components/PostCard";
+import LoadingCard from "../../Components/LoadingCard";
 import "./style.css";
 
 export default class HomePage extends React.Component {
@@ -32,7 +33,23 @@ export default class HomePage extends React.Component {
       </div>
     ));
   };
+
   render() {
-    return <div className="homepage">{this.getUserCards()}</div>;
+    const { dataList } = this.state;
+    const style = {
+      height: "60px",
+      width: "100%"
+    };
+    let user = localStorage.getItem("userName");
+    return (
+      <div className="homepage">
+        <h3>{user}</h3>
+        {dataList.length !== 0 ? (
+          this.getUserCards()
+        ) : (
+          <LoadingCard style={style} count={5} />
+        )}
+      </div>
+    );
   }
 }
